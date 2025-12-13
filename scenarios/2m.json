@@ -1,0 +1,47 @@
+{
+  "duration_seconds": 120,
+  "phases": [
+    {
+      "start": 0,
+      "end": 20,
+      "network": "normal",
+      "auth": "normal",
+      "device": "normal"
+    },
+    {
+      "start": 20,
+      "end": 40,
+      "network": "ddos",
+      "auth": "bruteforce",
+      "device": "system_stress"
+    },
+    {
+      "start": 40,
+      "end": 60,
+      "network": "slowloris",
+      "auth": "credential_stuffing",
+      "device": "crypto_mining"
+    },
+    {
+      "start": 60,
+      "end": 80,
+      "network": "portscan",
+      "auth": "password_spray",
+      "device": "memory_leak"
+    },
+    {
+      "start": 80,
+      "end": 100,
+      "network": "exfiltration",
+      "auth": "session_hijack",
+      "device": "disk_flood"
+    },
+    {
+      "start": 100,
+      "end": 120,
+      "network": "botnet",
+      "auth": "admin_abuse",
+      "device": "fork_bomb"
+    }
+  ]
+}

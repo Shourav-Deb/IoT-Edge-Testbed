@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Edge IoT Device Sensors</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- Blue/Red popup -->
+  <div id="popup" class="popup"></div>
+
+  <div class="page">
+    <header class="top">
+      <h1 class="title">Edge IoT Device Sensors</h1>
+      <p class="subtitle">Centralized Scenario-Driven TCP Testbed</p>
+    </header>
+
+    <section class="card">
+      <div class="card-head">
+        <div class="left">
+          <h2 class="section-title">Testbed Scenario</h2>
+          <div id="live-badge" class="live-badge hidden">LIVE</div>
+        </div>
+        <button id="testbed-toggle" class="btn-pill btn-off">OFF</button>
+      </div>
+
+      <div class="upload">
+        <label class="label">Choose Scenario JSON</label>
+        <input type="file" id="scenario-file" class="file" />
+        <button id="scenario-upload" class="btn-green">Upload Scenario</button>
+      </div>
+
+      <hr class="divider">
+
+      <h2 class="section-title blue">Monitoring</h2>
+
+      <div class="block">
+        <h3 class="block-title">Network</h3>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="monitor-network" class="table"></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3 class="block-title">Authentication</h3>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="monitor-auth" class="table"></table>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <h3 class="block-title">Device</h3>
+        <div class="table-card">
+          <div class="table-wrap">
+            <table id="monitor-device" class="table"></table>
+          </div>
+        </div>
+      </div>
+
+      <p class="footnote">
+        Tip: Attack rows are highlighted as Alert popup appears when an attack is initialized.
+      </p>
+    </section>
+
+    <footer class="footer">Testbed • Shourav Deb</footer>
+  </div>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>

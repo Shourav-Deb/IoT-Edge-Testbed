@@ -1,0 +1,181 @@
+
+:root{
+  --bg:#f4f7ff;
+  --card:#ffffff;
+  --blue:#1a73e8;
+  --blue-soft:#eaf1ff;
+  --text:#1f2937;
+  --muted:#5b6472;
+  --border:#d9e3f5;
+  --shadow:0 10px 30px rgba(0,0,0,.10);
+
+  --green:#28a745;
+  --red:#d32f2f;
+  --red-soft:#ffe5e5;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* Layout */
+.page{max-width:1100px;margin:0 auto;padding:22px}
+.top{text-align:center;margin-top:10px}
+.title{color:var(--blue);margin:0;font-size:34px;font-weight:800}
+.subtitle{margin:8px 0 0;color:var(--muted);font-style:italic}
+
+/* Card */
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  margin-top:22px;
+  box-shadow:var(--shadow);
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+
+.left{display:flex;align-items:center;gap:14px}
+.section-title{margin:0;font-size:22px;font-weight:800}
+.section-title.blue{color:var(--blue)}
+
+.divider{
+  border:none;
+  border-top:1px solid var(--border);
+  margin:18px 0;
+}
+
+/* Live badge */
+.live-badge{
+  padding:6px 12px;
+  border-radius:999px;
+  background:var(--blue);
+  color:#fff;
+  font-size:12px;
+  font-weight:800;
+  animation:blink 1.1s infinite;
+}
+.hidden{display:none}
+@keyframes blink{0%{opacity:1}50%{opacity:.35}100%{opacity:1}}
+
+/* Buttons */
+.btn-pill{
+  border:none;
+  border-radius:999px;
+  padding:10px 30px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.15s;
+}
+.btn-pill:hover{transform:translateY(-1px)}
+.btn-off{background:#cfd7e6;color:#0f172a}
+.btn-on{background:var(--blue);color:white;box-shadow:0 10px 16px rgba(26,115,232,.25)}
+
+.btn-green{
+  margin-top:10px;
+  padding:10px 20px;
+  background:var(--green);
+  color:white;
+  border:none;
+  border-radius:999px;
+  font-weight:800;
+  cursor:pointer;
+  transition:.15s;
+}
+.btn-green:hover{transform:translateY(-1px)}
+
+/* Upload */
+.upload{margin-top:14px}
+.label{display:block;font-weight:800;margin-bottom:6px}
+.file{width:100%;padding:10px;border-radius:12px;border:1px solid var(--border)}
+
+/* Blocks */
+.block{margin-top:18px}
+.block-title{margin:0 0 10px;font-size:18px;font-weight:900;color:#0b296b}
+
+/* Tables */
+.table-card{
+  border:1px solid var(--border);
+  border-radius:14px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.table-wrap{
+  max-height:320px;       /* vertical scroll */
+  overflow:auto;          /* horizontal + vertical scroll */
+}
+
+.table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:760px;        /* forces horizontal scroll when small screen */
+}
+
+.table th, .table td{
+  padding:8px 10px;
+  border-bottom:1px solid #e8eefb;
+  border-right:1px solid #eef3ff;
+  white-space:nowrap;
+  font-size:14px;
+}
+
+.table thead th{
+  position:sticky;
+  top:0;
+  z-index:1;
+  background:var(--blue-soft);
+  color:#0b296b;
+  font-weight:900;
+}
+
+/* Attack row highlight */
+.attack-row td{
+  background:var(--red-soft) !important;
+  color:#b00020;
+  font-weight:900;
+}
+
+/* Popup */
+.popup{
+  position:fixed;
+  top:20px;
+  right:24px;
+  padding:12px 18px;
+  border-radius:12px;
+  background:var(--blue);
+  color:white;
+  font-weight:900;
+  opacity:0;
+  transform:translateY(-6px);
+  transition:.25s;
+  z-index:9999;
+  box-shadow:0 14px 26px rgba(0,0,0,.18);
+}
+.popup.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* Footer */
+.footer{
+  text-align:center;
+  margin:22px 0 6px;
+  color:#4a4a4a;
+}
+
+.footnote{
+  margin-top:16px;
+  color:var(--muted);
+  font-size:13px;
+}
