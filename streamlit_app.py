@@ -56,7 +56,25 @@ with col3:
 # -----------------------------
 # Status
 # -----------------------------
-status = requests.get(f"{BACKEND}/api/testbed/status").json()
+def backend_get(path):
+    try:
+        return requests.get(f"{BACKEND}{path}", timeout=2).json()
+    except Exception:
+        return None
+
+def backend_post(path, **kwargs):
+    try:
+        return requests.post(f"{BACKEND}{path}", timeout=2, **kwargs).json()
+    except Exception:
+        return None
+
+
+status = backend_get("/api/testbed/status")
+
+if status is None:
+    st.warning("Backend not connected. Running in Streamlit-only mode.")
+    st.stop()
+
 if status.get("running"):
     st.markdown("🟢 **LIVE — Testbed Running**")
 else:
@@ -131,3 +149,4 @@ for r in rows[-5:]:
     if r["values"].get("event") != "Normal":
         st.error(f"⚠ Attack Detected: {r['values']['event']}")
         break
+
