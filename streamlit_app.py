@@ -1,12 +1,12 @@
 # streamlit_app.py
-# EWAD Streamlit Demo Application
+
 
 
 import streamlit as st
-import json
-import os
-import time
 import pandas as pd
+import json
+import time
+import os
 
 # -------------------------------------------------
 # Page Config
@@ -23,23 +23,6 @@ st.markdown("""
 <style>
 body { background-color:#f4f7ff; }
 h1, h2, h3 { color:#1a73e8; }
-
-.badge-live {
-    background:#1a73e8;
-    color:white;
-    padding:6px 14px;
-    border-radius:999px;
-    font-weight:bold;
-}
-
-.badge-off {
-    background:#cfd7e6;
-    color:#1f2937;
-    padding:6px 14px;
-    border-radius:999px;
-    font-weight:bold;
-}
-
 .attack-box {
     background:#ffe5e5;
     color:#b00020;
@@ -47,7 +30,6 @@ h1, h2, h3 { color:#1a73e8; }
     border-radius:10px;
     font-weight:bold;
 }
-
 .normal-box {
     background:#eaf1ff;
     color:#0b296b;
@@ -77,12 +59,12 @@ if "completed" not in st.session_state:
     st.session_state.completed = False
 
 # -------------------------------------------------
-# Load Scenarios
+# Load Scenarios from Repo
 # -------------------------------------------------
 SCENARIO_DIR = "scenarios"
 
 if not os.path.exists(SCENARIO_DIR):
-    st.error("❌ 'scenarios/' folder not found.")
+    st.error("❌ 'scenarios/' folder not found in repository.")
     st.stop()
 
 scenario_files = sorted(
@@ -106,69 +88,66 @@ phases = scenario["phases"]
 st.divider()
 st.subheader("Testbed Control")
 
-c1, c2, c3 = st.columns([2,2,2])
+col1, col2, col3 = st.columns([2,2,2])
 
-with c1:
-    if st.button("▶ ON", disabled=st.session_state.running):
+with col1:
+    if st.button("▶ ON"):
         st.session_state.running = True
         st.session_state.completed = False
-        st.session_state.t = 0  # RESET time
 
-with c2:
+with col2:
     if st.button("■ OFF"):
         st.session_state.running = False
 
-with c3:
+with col3:
     if st.session_state.running:
-        st.markdown('<span class="badge-live">LIVE</span>', unsafe_allow_html=True)
+        st.markdown("🟢 **LIVE**")
     else:
-        st.markdown('<span class="badge-off">OFF</span>', unsafe_allow_html=True)
+        st.markdown("⚪ **OFF**")
 
 # -------------------------------------------------
-# Time Progression (SAFE METHOD)
+# Timeline Logic
 # -------------------------------------------------
 if st.session_state.running:
     time.sleep(1)
     st.session_state.t += 1
 
     if st.session_state.t >= duration:
-        st.session_state.t = duration
         st.session_state.running = False
         st.session_state.completed = True
-    else:
-        st.rerun()
+        st.session_state.t = duration
 
-# -------------------------------------------------
-# Timeline Indicator
-# -------------------------------------------------
-st.slider(
+t = st.slider(
     "Simulation Time (seconds)",
     min_value=0,
     max_value=duration,
     value=st.session_state.t,
-    step=1,
-    disabled=True
+    step=1
 )
 
 # -------------------------------------------------
-# Completion Message
+# Scenario Completion Popup
 # -------------------------------------------------
 if st.session_state.completed:
-    st.success("✅ Scenario has been completed automatically.")
+    st.success("✅ Scenario has been completed.")
 
 # -------------------------------------------------
-# Determine Current Phase
+# Get Current Phase
 # -------------------------------------------------
 def get_state(t):
     for p in phases:
         if p["start"] <= t < p["end"]:
             return p
-    return {"network":"normal","auth":"normal","device":"normal"}
+    return {
+        "network": "normal",
+        "auth": "normal",
+        "device": "normal"
+    }
 
-state = get_state(st.session_state.t)
+state = get_state(t)
 
 # -------------------------------------------------
-# Monitoring
+# Monitoring Section
 # -------------------------------------------------
 st.divider()
 st.subheader("Monitoring")
@@ -176,8 +155,10 @@ st.subheader("Monitoring")
 def show_sensor(title, attack):
     st.subheader(title)
     if attack == "normal":
-        st.markdown('<div class="normal-box">Normal Operation</div>',
-                    unsafe_allow_html=True)
+        st.markdown(
+            '<div class="normal-box">Normal Operation</div>',
+            unsafe_allow_html=True
+        )
     else:
         st.markdown(
             f'<div class="attack-box">⚠ Attack Active: {attack}</div>',
@@ -188,8 +169,10 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
     show_sensor("Network Sensor", state["network"])
+
 with col2:
     show_sensor("Authentication Sensor", state["auth"])
+
 with col3:
     show_sensor("Device Sensor", state["device"])
 
@@ -210,13 +193,15 @@ def style_row(row):
         return ["background:#ffe5e5; color:#b00020; font-weight:bold"] * len(row)
     return [""] * len(row)
 
-st.dataframe(df.style.apply(style_row, axis=1),
-             use_container_width=True)
+st.dataframe(
+    df.style.apply(style_row, axis=1),
+    use_container_width=True
+)
 
 # -------------------------------------------------
 # Footer
 # -------------------------------------------------
 st.caption(
-    "Streamlit demo mode reads scenario files from the repository. "
-    "Full TCP-based generation runs in the Flask backend."
+    "Streamlit-only demo mode | Shourav Deb "
+    "Live TCP sensor generation runs in the Flask backend (local deployment)."
 )
