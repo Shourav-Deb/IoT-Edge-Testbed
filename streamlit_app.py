@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 # -------------------------------------------------
-# UI Styling (White & Blue Theme)
+# UI Styling
 # -------------------------------------------------
 st.markdown("""
 <style>
@@ -134,10 +134,10 @@ if st.session_state.running:
         st.session_state.completed = True
         st.session_state.t = duration
 
-    st.experimental_rerun()
+    st.rerun()
 
 # -------------------------------------------------
-# Timeline Slider (Read-only indicator)
+# Timeline Indicator (Read-only)
 # -------------------------------------------------
 st.slider(
     "Simulation Time (seconds)",
@@ -155,7 +155,7 @@ if st.session_state.completed:
     st.success("✅ Scenario has been completed automatically.")
 
 # -------------------------------------------------
-# Get Current Scenario State
+# Determine Current Phase
 # -------------------------------------------------
 def get_state(t):
     for p in phases:
@@ -222,5 +222,5 @@ st.dataframe(
 # -------------------------------------------------
 st.caption(
     "Streamlit demo mode uses scenario definitions from the repository. "
-    "Live TCP sensor generation runs in the Flask backend (local deployment)."
+    "Live TCP sensor generation runs in the Flask backend (local git deployment)."
 )
