@@ -1,9 +1,9 @@
 # streamlit_app.py
 # EWAD Streamlit Demo Application
 
+
 import streamlit as st
 import json
-import time
 import os
 import pandas as pd
 
@@ -111,6 +111,7 @@ with col1:
     if st.button("▶ ON", disabled=st.session_state.running):
         st.session_state.running = True
         st.session_state.completed = False
+        st.session_state.t = 0   # reset time
 
 with col2:
     if st.button("■ OFF"):
@@ -123,18 +124,21 @@ with col3:
         st.markdown('<span class="badge-off">OFF</span>', unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Auto-Run Logic (1 second step)
+# Auto Refresh (CORRECT way)
 # -------------------------------------------------
 if st.session_state.running:
-    time.sleep(1)
+    st.autorefresh(interval=1000, key="ewad_tick")
+
+# -------------------------------------------------
+# Time Progression
+# -------------------------------------------------
+if st.session_state.running:
     st.session_state.t += 1
 
     if st.session_state.t >= duration:
+        st.session_state.t = duration
         st.session_state.running = False
         st.session_state.completed = True
-        st.session_state.t = duration
-
-    st.rerun()
 
 # -------------------------------------------------
 # Timeline Indicator (Read-only)
@@ -222,5 +226,6 @@ st.dataframe(
 # -------------------------------------------------
 st.caption(
     "Streamlit demo mode uses scenario definitions from the repository. "
-    "Live TCP sensor generation runs in the Flask backend (local git deployment)."
+    "Live TCP sensor generation runs in the Flask backend (local deployment)."
+    "Shourav Deb"
 )
