@@ -1,13 +1,11 @@
 # streamlit_app.py
-# EWAD Streamlit Frontend
-# Streamlit-only demo mode (GitHub scenarios)
-# White & Blue UI | ON / OFF | LIVE indicator | Attack alerts
+# EWAD Streamlit Demo Application
 
 import streamlit as st
-import pandas as pd
 import json
 import time
 import os
+import pandas as pd
 
 # -------------------------------------------------
 # Page Config
@@ -18,12 +16,29 @@ st.set_page_config(
 )
 
 # -------------------------------------------------
-# UI Styling (White & Blue)
+# UI Styling (White & Blue Theme)
 # -------------------------------------------------
 st.markdown("""
 <style>
 body { background-color:#f4f7ff; }
 h1, h2, h3 { color:#1a73e8; }
+
+.badge-live {
+    background:#1a73e8;
+    color:white;
+    padding:6px 14px;
+    border-radius:999px;
+    font-weight:bold;
+}
+
+.badge-off {
+    background:#cfd7e6;
+    color:#1f2937;
+    padding:6px 14px;
+    border-radius:999px;
+    font-weight:bold;
+}
+
 .attack-box {
     background:#ffe5e5;
     color:#b00020;
@@ -31,6 +46,7 @@ h1, h2, h3 { color:#1a73e8; }
     border-radius:10px;
     font-weight:bold;
 }
+
 .normal-box {
     background:#eaf1ff;
     color:#0b296b;
@@ -48,7 +64,7 @@ st.title("Edge IoT Device Sensors")
 st.caption("Scenario-Driven IoT Edge Testbed (Streamlit Demo Mode)")
 
 # -------------------------------------------------
-# Session State
+# Session State Initialization
 # -------------------------------------------------
 if "running" not in st.session_state:
     st.session_state.running = False
@@ -60,7 +76,7 @@ if "completed" not in st.session_state:
     st.session_state.completed = False
 
 # -------------------------------------------------
-# Load Scenarios from Repo
+# Load Scenarios from Repository
 # -------------------------------------------------
 SCENARIO_DIR = "scenarios"
 
@@ -92,7 +108,7 @@ st.subheader("Testbed Control")
 col1, col2, col3 = st.columns([2,2,2])
 
 with col1:
-    if st.button("▶ ON"):
+    if st.button("▶ ON", disabled=st.session_state.running):
         st.session_state.running = True
         st.session_state.completed = False
 
@@ -102,12 +118,12 @@ with col2:
 
 with col3:
     if st.session_state.running:
-        st.markdown("🟢 **LIVE**")
+        st.markdown('<span class="badge-live">LIVE</span>', unsafe_allow_html=True)
     else:
-        st.markdown("⚪ **OFF**")
+        st.markdown('<span class="badge-off">OFF</span>', unsafe_allow_html=True)
 
 # -------------------------------------------------
-# Timeline Logic
+# Auto-Run Logic (1 second step)
 # -------------------------------------------------
 if st.session_state.running:
     time.sleep(1)
@@ -118,34 +134,36 @@ if st.session_state.running:
         st.session_state.completed = True
         st.session_state.t = duration
 
-t = st.slider(
+    st.experimental_rerun()
+
+# -------------------------------------------------
+# Timeline Slider (Read-only indicator)
+# -------------------------------------------------
+st.slider(
     "Simulation Time (seconds)",
     min_value=0,
     max_value=duration,
     value=st.session_state.t,
-    step=1
+    step=1,
+    disabled=True
 )
 
 # -------------------------------------------------
-# Scenario Completion Popup
+# Completion Message
 # -------------------------------------------------
 if st.session_state.completed:
-    st.success("✅ Scenario has been completed.")
+    st.success("✅ Scenario has been completed automatically.")
 
 # -------------------------------------------------
-# Get Current Phase
+# Get Current Scenario State
 # -------------------------------------------------
 def get_state(t):
     for p in phases:
         if p["start"] <= t < p["end"]:
             return p
-    return {
-        "network": "normal",
-        "auth": "normal",
-        "device": "normal"
-    }
+    return {"network":"normal","auth":"normal","device":"normal"}
 
-state = get_state(t)
+state = get_state(st.session_state.t)
 
 # -------------------------------------------------
 # Monitoring Section
@@ -166,15 +184,15 @@ def show_sensor(title, attack):
             unsafe_allow_html=True
         )
 
-col1, col2, col3 = st.columns(3)
+c1, c2, c3 = st.columns(3)
 
-with col1:
+with c1:
     show_sensor("Network Sensor", state["network"])
 
-with col2:
+with c2:
     show_sensor("Authentication Sensor", state["auth"])
 
-with col3:
+with c3:
     show_sensor("Device Sensor", state["device"])
 
 # -------------------------------------------------
@@ -203,6 +221,6 @@ st.dataframe(
 # Footer
 # -------------------------------------------------
 st.caption(
-    "Streamlit-only demo mode. "
+    "Streamlit demo mode uses scenario definitions from the repository. "
     "Live TCP sensor generation runs in the Flask backend (local deployment)."
 )
