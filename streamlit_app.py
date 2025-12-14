@@ -203,5 +203,6 @@ st.dataframe(
 # -------------------------------------------------
 st.caption(
     "Streamlit-only demo mode | Shourav Deb "
-    "Live TCP sensor generation runs in the Flask backend (local deployment)."
+    "Deb | Live TCP sensor generation runs in the Flask backend (local deployment)."
 )
+
